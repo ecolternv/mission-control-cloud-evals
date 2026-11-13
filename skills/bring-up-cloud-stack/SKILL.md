@@ -129,6 +129,16 @@ effect.
    `change-stack-version` rewrites `images.conf`.
 7. After detached startup, check Mission Control health and logs as described below.
 
+## Waiting for startup
+
+Image downloads and first startup can take several minutes. Start the runner with
+the longest supported initial command wait. If the tool returns a running session,
+keep waiting on that same session with its longest supported blocking wait rather
+than short repeated polls. Wait for the runner to finish before launching status
+checks or troubleshooting commands. This avoids repeated model turns spent only
+redisplaying image-pull progress; it does not change the startup timeout or skip
+any checks. A failed exit still requires diagnosis.
+
 ## Available Scripts
 
 | Script | Purpose | Arguments |
