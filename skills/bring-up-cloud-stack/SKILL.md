@@ -108,6 +108,24 @@ deliberately override the resolved value. `CONFIG_DIR` is the exception:
 it after sourcing, so neither the value in `.env` nor one you export has any
 effect.
 
+## Shell execution recipe
+
+When a dedicated script runner is unavailable, run preflight and normal startup
+in the same shell execution, joined by `&&`. This preserves the requirement that
+startup never runs after a failed preflight, while avoiding a separate model turn
+between two already-specified steps:
+
+```bash
+bash skills/bring-up-cloud-stack/scripts/preflight.sh && \
+  bash skills/bring-up-cloud-stack/scripts/up.sh
+```
+
+Use the corresponding absolute installed skill paths outside the repository.
+Pass only each script's supported flags for the requested mode. Wait for this
+execution to finish before performing the normal container and health checks.
+A preflight failure still requires diagnosis; do not bypass it or replace `&&`
+with an unconditional second command.
+
 ## Instructions
 
 1. Read the requested mode: cloud only, cloud plus simulator, foreground logs, image pull, config reread, or dry run.
