@@ -246,6 +246,21 @@ The script can be called via either an absolute or relative path. The workspace 
 
 ## Troubleshooting
 
+### First-start MQTT connection refusal
+
+During a fresh initial startup, Mission Dispatch can exit before the MQTT broker
+has finished opening its configured listener. HTTP health alone does not detect
+this: check all requested containers, including exited containers, after the
+runner finishes.
+
+If Dispatch is the exited service, its bounded log shows MQTT connection refusal,
+and the broker is now listening at the configured endpoint, invoke the same
+`up.sh` runner once more without `--recreate`. Compose reuses the running services
+and starts the stopped Dispatch container with the existing configuration. Check
+container state and health again. This is a bounded startup recovery, not a reason
+to delete containers or alter transport settings. A persistent failure needs its
+own diagnosis and must be reported; other errors do not imply this recovery.
+
 ### Container Recovery
 
 Avoid destructive recovery unless the user explicitly asks. Do not use:
