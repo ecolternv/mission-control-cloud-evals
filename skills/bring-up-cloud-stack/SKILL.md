@@ -129,6 +129,25 @@ effect.
    `change-stack-version` rewrites `images.conf`.
 7. After detached startup, check Mission Control health and logs as described below.
 
+## Orchestrating a long startup command
+
+If the tool interface supports asynchronous code orchestration, keep the repeated
+waits for a running startup session inside one code execution rather than asking
+the model to issue every progress poll. Start the existing runner once, then loop
+while it has a session ID: await the session with empty input and a supported
+blocking wait, retain its most recent output tail, and emit the terminal exit code
+and tail when it finishes. Never start a duplicate runner to poll its progress.
+
+Coordinate the outer code-execution wait with those inner waits. For an interface
+supporting it, an outer wait budget of 60 seconds (for example an exec pragma with
+`yield_time_ms: 60000`) can cover repeated 30-second session waits. If the outer
+execution returns a cell ID, resume that same cell with a supported long wait;
+do not create a second polling loop. An inner wait longer than the outer budget
+otherwise creates an extra model turn just to wait on the tool that is waiting.
+Honor the tool's actual limits and user-update requirements. When orchestration is
+unavailable, use the normal foreground/session-wait interface. Preserve exit codes,
+retain diagnostics, and perform the normal container and health checks afterward.
+
 ## Available Scripts
 
 | Script | Purpose | Arguments |
