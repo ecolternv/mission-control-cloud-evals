@@ -129,6 +129,16 @@ effect.
    `change-stack-version` rewrites `images.conf`.
 7. After detached startup, check Mission Control health and logs as described below.
 
+## Startup output
+
+Keep complete startup output in a log file under `MC_WORKSPACE` (or a temporary
+log if no workspace was selected). Image-download progress is for the operator's
+log, not repeated model context: redirect the runner's stdout and stderr there,
+wait for it to finish, and return its exit status with a short final tail. If it
+fails, show a bounded error tail and inspect the saved log as needed. Preserve the
+full log; do not suppress failures or report success from an empty output stream.
+Continue the normal service-status and configured health checks after startup.
+
 ## Available Scripts
 
 | Script | Purpose | Arguments |
