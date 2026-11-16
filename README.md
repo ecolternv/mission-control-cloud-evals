@@ -29,6 +29,9 @@ Visit [objectives_doc.md](docs/objectives_doc.md) to understand how to create mu
 
 Visit the [Isaac ROS Mission Control Tutorial](https://nvidia-isaac-ros.github.io/repositories_and_packages/isaac_ros_cloud_control/isaac_ros_mission_client/tutorial_isaac_mission_control.html#agent-mode) to see how to drive Mission Control through an AI coding assistant (Claude Code, Cursor, Codex, and other tools in the Agent Skills client showcase) using its agent skill.
 
+Read the [bringup token optimization study](docs/mission-control-token-study.md) for an
+evaluation of skill changes using `nemo evals agent-evaluate`.
+
 ## Get Started
 
 ### Local Development
